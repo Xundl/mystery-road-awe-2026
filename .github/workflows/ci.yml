@@ -24,4 +24,4 @@ jobs:
         run: npm run lint
 
       - name: Check formatting with Prettier
-        run: npx prettier --check js app.js
+        run: npx prettier --check js app.ts
