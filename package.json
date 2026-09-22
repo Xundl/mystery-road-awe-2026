@@ -1,0 +1,20 @@
+{
+  "name": "mystery-road-awe-2026",
+  "version": "1.0.0",
+  "description": "Investigation portal for Project ReMotion",
+  "homepage": "https://github.com/Xundl/mystery-road-awe-2026#readme",
+  "bugs": {
+    "url": "https://github.com/Xundl/mystery-road-awe-2026/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xundl/mystery-road-awe-2026.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
