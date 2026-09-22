@@ -7,21 +7,14 @@ import {
   setEvidenceViewLoading,
   setFilteredEvidence,
   currentPage,
-  populateAllDropdowns
+  populateAllDropdowns,
 } from "../app.js";
 
-import { 
-    renderDashboard
-} from "./dashboard.js";
+import { renderDashboard } from "./dashboard.js";
 
-import { 
-    applyStoredBookmarkFlags,
-    renderEvidenceList 
-} from "./evidence.js";
+import { applyStoredBookmarkFlags, renderEvidenceList } from "./evidence.js";
 
-import { 
-    renderTimeline 
-} from "./timeline.js";
+import { renderTimeline } from "./timeline.js";
 
 let loadingStepsRemaining = 2;
 
@@ -79,7 +72,9 @@ async function loadEvidenceData() {
 
 function loadTimelineData() {
   return fetch("data/timeline.json")
-    .then(function (res) { return res.json(); })
+    .then(function (res) {
+      return res.json();
+    })
     .then(function (data) {
       setAllTimeline(data);
       renderDashboard();
