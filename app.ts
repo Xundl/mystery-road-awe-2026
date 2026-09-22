@@ -1,7 +1,13 @@
 // ---------------------------------------------------------------------
 // GLOBAL STATE
 // ---------------------------------------------------------------------
-import type { CaseData, Person, Location, Evidence, TimelineEvent } from "./js/types.js";
+import type {
+  CaseData,
+  Person,
+  Location,
+  Evidence,
+  TimelineEvent,
+} from "./js/types.js";
 
 export let allEvidence: Evidence[] = [];
 export let filteredEvidence: Evidence[] = [];
@@ -23,7 +29,7 @@ export const viewRendered = {
   evidence: false,
   people: false,
   timeline: false,
-  workspace: false
+  workspace: false,
 };
 
 export const notesStore: Record<string, string> = {};
@@ -32,16 +38,36 @@ export const STORAGE_KEY_BOOKMARKS = "remotion_bookmarks";
 export const STORAGE_KEY_NOTES = "remotion_notes";
 export const STORAGE_KEY_HYPOTHESIS = "remotion_hypothesis";
 
-export function setAllEvidence(data: Evidence[]) { allEvidence = data; }
-export function setAllPeople(data: Person[]) { allPeople = data; }
-export function setAllLocations(data: Location[]) { allLocations = data; }
-export function setAllTimeline(data: TimelineEvent[]) { allTimeline = data; }
-export function setCaseData(data: CaseData) { caseData = data; }
-export function setEvidenceViewLoading(val: boolean) { evidenceViewLoading = val; }
-export function setFilteredEvidence(data: Evidence[]) { filteredEvidence = data; }
-export function setSelectedEvidence(ev: Evidence | null) { selectedEvidence = ev; }
-export function setCurrentPeopleTab(tab: string) { currentPeopleTab = tab; }
-export function setCurrentPage(page: string) { currentPage = page; }
+export function setAllEvidence(data: Evidence[]) {
+  allEvidence = data;
+}
+export function setAllPeople(data: Person[]) {
+  allPeople = data;
+}
+export function setAllLocations(data: Location[]) {
+  allLocations = data;
+}
+export function setAllTimeline(data: TimelineEvent[]) {
+  allTimeline = data;
+}
+export function setCaseData(data: CaseData) {
+  caseData = data;
+}
+export function setEvidenceViewLoading(val: boolean) {
+  evidenceViewLoading = val;
+}
+export function setFilteredEvidence(data: Evidence[]) {
+  filteredEvidence = data;
+}
+export function setSelectedEvidence(ev: Evidence | null) {
+  selectedEvidence = ev;
+}
+export function setCurrentPeopleTab(tab: string) {
+  currentPeopleTab = tab;
+}
+export function setCurrentPage(page: string) {
+  currentPage = page;
+}
 
 export let modalCloseListenerCount = 0;
 export function incrementModalCloseListenerCount() {
