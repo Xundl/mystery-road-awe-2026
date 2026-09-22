@@ -1,6 +1,9 @@
-export default [
+import tseslint from "typescript-eslint";
+
+export default tseslint.config(
+  ...tseslint.configs.recommended,
   {
-    files: ["js/**/*.js", "app.js"],
+    files: ["js/**/*.js", "js/**/*.ts", "app.ts"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
@@ -15,8 +18,9 @@ export default [
       }
     },
     rules: {
-      "no-unused-vars": "warn",
-      "no-undef": "error"
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "warn"
     }
   }
-];
+);

@@ -18,16 +18,17 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint js app.js",
-    "lint:fix": "eslint js app.js --fix",
-    "format": "prettier --write js app.js",
+    "lint": "eslint js app.ts",
+    "lint:fix": "eslint js app.ts --fix",
+    "format": "prettier --write js app.ts",
     "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
     "eslint": "^10.11.0",
     "prettier": "^3.9.8",
-    "typescript": "^7.0.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.1",
     "vite": "^8.3.0"
   }
 }
