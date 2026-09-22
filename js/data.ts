@@ -10,6 +10,14 @@ import {
   populateAllDropdowns,
 } from "../app.js";
 
+import type {
+  CaseData,
+  Person,
+  Location,
+  Evidence,
+  TimelineEvent
+} from "./types.js";
+
 import { renderDashboard } from "./dashboard.js";
 
 import { applyStoredBookmarkFlags, renderEvidenceList } from "./evidence.js";
@@ -18,7 +26,7 @@ import { renderTimeline } from "./timeline.js";
 
 let loadingStepsRemaining = 2;
 
-export function showLoadingOverlay(msg) {
+export function showLoadingOverlay(msg: string) {
   const overlay = document.getElementById("loadingOverlay");
   const text = document.getElementById("loadingText");
   if (text) text.textContent = msg;
@@ -35,16 +43,15 @@ function hideLoadingStep() {
 
 async function loadCorePeopleAndLocations() {
   const caseRes = await fetch("data/case.json");
-  //const caseJson = caseRes.json();
-  const caseJson = await caseRes.json();
+  const caseJson = (await caseRes.json()) as CaseData;
   setCaseData(caseJson);
 
   const peopleRes = await fetch("data/people.json");
-  const peopleJson = await peopleRes.json();
+   const peopleJson = (await peopleRes.json()) as Person[];
   setAllPeople(peopleJson);
 
   const locationsRes = await fetch("data/locations.json");
-  const locationsJson = await locationsRes.json();
+  const locationsJson = (await locationsRes.json()) as Location[];
   setAllLocations(locationsJson);
 
   hideLoadingStep();
@@ -55,7 +62,7 @@ async function loadCorePeopleAndLocations() {
 async function loadEvidenceData() {
   try {
     const res = await fetch("data/evidence.json");
-    const data = await res.json();
+    const data = (await res.json()) as Evidence[];
 
     setAllEvidence(data);
     applyStoredBookmarkFlags();
@@ -75,7 +82,7 @@ function loadTimelineData() {
     .then(function (res) {
       return res.json();
     })
-    .then(function (data) {
+    .then(function (data: TimelineEvent[]) {
       setAllTimeline(data);
       renderDashboard();
       if (currentPage === "timeline") renderTimeline();
