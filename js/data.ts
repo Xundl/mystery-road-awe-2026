@@ -15,7 +15,7 @@ import type {
   Person,
   Location,
   Evidence,
-  TimelineEvent
+  TimelineEvent,
 } from "./types.js";
 
 import { renderDashboard } from "./dashboard.js";
@@ -47,7 +47,7 @@ async function loadCorePeopleAndLocations() {
   setCaseData(caseJson);
 
   const peopleRes = await fetch("data/people.json");
-   const peopleJson = (await peopleRes.json()) as Person[];
+  const peopleJson = (await peopleRes.json()) as Person[];
   setAllPeople(peopleJson);
 
   const locationsRes = await fetch("data/locations.json");
