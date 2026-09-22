@@ -12,5 +12,5 @@
     "checkJs": false,
     "noEmit": true
   },
-  "include": ["js/**/*.ts", "app.ts"]
+  "include": ["js/**/*.ts", "app.ts", "global.d.ts"]
 }

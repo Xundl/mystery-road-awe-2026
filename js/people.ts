@@ -4,15 +4,16 @@ import {
   allEvidence,
   setCurrentPeopleTab,
 } from "../app.js";
-import { evidenceMentionsPerson } from "./utils.js";
+import { evidenceMentionsPerson, getEl } from "./utils.js";
 import { renderEvidenceList } from "./evidence.js";
+import type { Person } from "./types.js";
 
-export function switchPeopleTab(tab) {
+export function switchPeopleTab(tab: string) {
   setCurrentPeopleTab(tab);
-  const peoplePanel = document.getElementById("peoplePanel");
-  const locationsPanel = document.getElementById("locationsPanel");
-  const peopleTabBtn = document.getElementById("tabPeopleBtn");
-  const locationsTabBtn = document.getElementById("tabLocationsBtn");
+  const peoplePanel = getEl("peoplePanel");
+  const locationsPanel = getEl("locationsPanel");
+  const peopleTabBtn = getEl("tabPeopleBtn");
+  const locationsTabBtn = getEl("tabLocationsBtn");
 
   if (tab === "people") {
     peoplePanel.classList.remove("hidden");
@@ -27,7 +28,7 @@ export function switchPeopleTab(tab) {
   }
 }
 
-function countEvidenceForPerson(person) {
+function countEvidenceForPerson(person: Person): number {
   let count = 0;
   for (let i = 0; i < allEvidence.length; i++) {
     if (evidenceMentionsPerson(allEvidence[i], person)) count++;
@@ -36,7 +37,7 @@ function countEvidenceForPerson(person) {
 }
 
 export function renderPeople() {
-  const container = document.getElementById("peoplePanel");
+  const container = getEl("peoplePanel");
   let html = "";
   for (let i = 0; i < allPeople.length; i++) {
     const person = allPeople[i];
@@ -84,8 +85,9 @@ export function renderPeople() {
   const links = container.querySelectorAll(".evidence-count-link");
   for (let l = 0; l < links.length; l++) {
     links[l].addEventListener("click", function (e) {
-      const personId = e.target.getAttribute("data-person-id");
-      document.getElementById("filterPerson").value = personId;
+      const target = e.target as HTMLElement;
+      const personId = target.getAttribute("data-person-id") || "";
+      getEl<HTMLSelectElement>("filterPerson").value = personId;
       window.navigateTo("evidence");
       setTimeout(function () {
         renderEvidenceList();
@@ -95,7 +97,7 @@ export function renderPeople() {
 }
 
 export function renderLocations() {
-  const container = document.getElementById("locationsPanel");
+  const container = getEl("locationsPanel");
   let html = "";
   for (let i = 0; i < allLocations.length; i++) {
     const loc = allLocations[i];

@@ -8,7 +8,7 @@ import {
 } from "../app.js";
 import { formatDate, getStatusBadgeClass } from "./utils.js";
 
-function statCardHTML(value, label) {
+function statCardHTML(value: number, label: string): string {
   return (
     '<div class="stat-card"><div class="stat-value">' +
     value +

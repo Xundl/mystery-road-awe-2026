@@ -1,5 +1,11 @@
 import { allEvidence, allPeople, allLocations } from "../app.js";
 
+export function getEl<T extends HTMLElement = HTMLElement>(id: string): T {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Element with id "${id}" not found`);
+  return el as T;
+}
+
 export function findEvidenceById(id: string): any {
   for (let i = 0; i < allEvidence.length; i++) {
     if (allEvidence[i].id === id) return allEvidence[i];

@@ -1,6 +1,54 @@
 // ---------------------------------------------------------------------
 // GLOBAL STATE
 // ---------------------------------------------------------------------
+import type { CaseData, Person, Location, Evidence, TimelineEvent } from "./js/types.js";
+
+export let allEvidence: Evidence[] = [];
+export let filteredEvidence: Evidence[] = [];
+export let selectedEvidence: Evidence | null = null;
+export const bookmarks: string[] = [];
+export let currentPage = "dashboard";
+
+export let allPeople: Person[] = [];
+export let allLocations: Location[] = [];
+export let allTimeline: TimelineEvent[] = [];
+export let caseData: CaseData = {} as CaseData;
+
+export let currentPeopleTab = "people";
+
+let evidenceViewLoading = true;
+
+export const viewRendered = {
+  dashboard: false,
+  evidence: false,
+  people: false,
+  timeline: false,
+  workspace: false
+};
+
+export const notesStore: Record<string, string> = {};
+
+export const STORAGE_KEY_BOOKMARKS = "remotion_bookmarks";
+export const STORAGE_KEY_NOTES = "remotion_notes";
+export const STORAGE_KEY_HYPOTHESIS = "remotion_hypothesis";
+
+export function setAllEvidence(data: Evidence[]) { allEvidence = data; }
+export function setAllPeople(data: Person[]) { allPeople = data; }
+export function setAllLocations(data: Location[]) { allLocations = data; }
+export function setAllTimeline(data: TimelineEvent[]) { allTimeline = data; }
+export function setCaseData(data: CaseData) { caseData = data; }
+export function setEvidenceViewLoading(val: boolean) { evidenceViewLoading = val; }
+export function setFilteredEvidence(data: Evidence[]) { filteredEvidence = data; }
+export function setSelectedEvidence(ev: Evidence | null) { selectedEvidence = ev; }
+export function setCurrentPeopleTab(tab: string) { currentPeopleTab = tab; }
+export function setCurrentPage(page: string) { currentPage = page; }
+
+export let modalCloseListenerCount = 0;
+export function incrementModalCloseListenerCount() {
+  modalCloseListenerCount++;
+  return modalCloseListenerCount;
+}
+
 import {
   findEvidenceById,
   findPersonById,
@@ -44,72 +92,6 @@ import {
 } from "./js/workspace.js";
 
 import { navigateTo, handleHashChange } from "./js/navigation.js";
-
-export let allEvidence = [];
-export let filteredEvidence = [];
-export let selectedEvidence = null;
-export const bookmarks = [];
-export let currentPage = "dashboard";
-
-export let allPeople = [];
-export let allLocations = [];
-export let allTimeline = [];
-export let caseData = {};
-
-export let currentPeopleTab = "people";
-
-let evidenceViewLoading = true;
-
-export const viewRendered = {
-  dashboard: false,
-  evidence: false,
-  people: false,
-  timeline: false,
-  workspace: false,
-};
-
-export const notesStore = {};
-
-export const STORAGE_KEY_BOOKMARKS = "remotion_bookmarks";
-export const STORAGE_KEY_NOTES = "remotion_notes";
-export const STORAGE_KEY_HYPOTHESIS = "remotion_hypothesis";
-
-export function setAllEvidence(data) {
-  allEvidence = data;
-}
-export function setAllPeople(data) {
-  allPeople = data;
-}
-export function setAllLocations(data) {
-  allLocations = data;
-}
-export function setAllTimeline(data) {
-  allTimeline = data;
-}
-export function setCaseData(data) {
-  caseData = data;
-}
-export function setEvidenceViewLoading(val) {
-  evidenceViewLoading = val;
-}
-export function setFilteredEvidence(data) {
-  filteredEvidence = data;
-}
-export function setSelectedEvidence(ev) {
-  selectedEvidence = ev;
-}
-export function setCurrentPeopleTab(tab) {
-  currentPeopleTab = tab;
-}
-export function setCurrentPage(page) {
-  currentPage = page;
-}
-
-export let modalCloseListenerCount = 0;
-export function incrementModalCloseListenerCount() {
-  modalCloseListenerCount++;
-  return modalCloseListenerCount;
-}
 
 // ---------------------------------------------------------------------
 // EVIDENCE CATALOGUE
@@ -207,7 +189,7 @@ function populateTimelineDropdowns() {
 // LOCAL STORAGE HELPERS (bookmarks & notes)
 // ---------------------------------------------------------------------
 
-export function loadNoteAsync(evidenceId) {
+export function loadNoteAsync(evidenceId: string) {
   return new Promise(function (resolve) {
     resolve(notesStore[evidenceId] || "");
   });

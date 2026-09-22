@@ -4,8 +4,9 @@ import { renderEvidenceList } from "./evidence.js";
 import { renderPeople, renderLocations } from "./people.js";
 import { renderTimeline } from "./timeline.js";
 import { renderWorkspace } from "./workspace.js";
+import { getEl } from "./utils.js";
 
-export function navigateTo(viewName) {
+export function navigateTo(viewName: string) {
   window.location.hash = viewName;
 }
 
@@ -27,7 +28,7 @@ export function handleHashChange() {
   for (let i = 0; i < sections.length; i++) {
     sections[i].classList.remove("active");
   }
-  document.getElementById("view-" + hash).classList.add("active");
+  getEl("view-" + hash).classList.add("active");
 
   const navButtons = document.querySelectorAll(".nav-btn");
   for (let n = 0; n < navButtons.length; n++) {

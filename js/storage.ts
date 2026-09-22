@@ -15,7 +15,7 @@ export function loadBookmarksFromStorage() {
     const parsed = raw ? JSON.parse(raw) : [];
     bookmarks.length = 0;
     if (Array.isArray(parsed)) {
-      parsed.forEach(function (id) {
+      parsed.forEach(function (id: string) {
         bookmarks.push(id);
       });
     }
@@ -25,12 +25,12 @@ export function loadBookmarksFromStorage() {
   }
 }
 
-export function saveNoteForEvidence(evidenceId, text) {
+export function saveNoteForEvidence(evidenceId: string, text: string) {
   notesStore[evidenceId] = text;
   localStorage.setItem(STORAGE_KEY_NOTES, JSON.stringify(notesStore));
 }
 
-export function loadNoteForEvidence(evidenceId) {
+export function loadNoteForEvidence(evidenceId: string): string {
   return notesStore[evidenceId] || "";
 }
 

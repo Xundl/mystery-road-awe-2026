@@ -1,9 +1,7 @@
 import {
   allEvidence,
   bookmarks,
-  filteredEvidence,
   setFilteredEvidence,
-  selectedEvidence,
   setSelectedEvidence,
   currentPage,
   viewRendered,
@@ -21,21 +19,26 @@ import {
   formatDate,
   getStatusBadgeClass,
   getRelevanceBadgeClass,
+  getEl,
 } from "./utils.js";
+import type { Evidence } from "./types.js";
 
-function getFilteredEvidence() {
-  const searchBox = document.getElementById("evidenceSearch");
+function getFilteredEvidence(): Evidence[] {
+  const searchBox = document.getElementById(
+    "evidenceSearch",
+  ) as HTMLInputElement | null;
   const searchTerm = searchBox ? searchBox.value.toLowerCase().trim() : "";
-  const typeVal = document.getElementById("filterType").value;
-  const personVal = document.getElementById("filterPerson").value;
-  const locationVal = document.getElementById("filterLocation").value;
-  const statusVal = document.getElementById("filterStatus").value;
-  const relevanceVal = document.getElementById("filterRelevance").value;
-  const sortVal = document.getElementById("sortEvidence")
-    ? document.getElementById("sortEvidence").value
-    : "date-desc";
+  const typeVal = getEl<HTMLSelectElement>("filterType").value;
+  const personVal = getEl<HTMLSelectElement>("filterPerson").value;
+  const locationVal = getEl<HTMLSelectElement>("filterLocation").value;
+  const statusVal = getEl<HTMLSelectElement>("filterStatus").value;
+  const relevanceVal = getEl<HTMLSelectElement>("filterRelevance").value;
+  const sortSelectEl = document.getElementById(
+    "sortEvidence",
+  ) as HTMLSelectElement | null;
+  const sortVal = sortSelectEl ? sortSelectEl.value : "date-desc";
 
-  let results = [];
+  const results: Evidence[] = [];
   for (let i = 0; i < allEvidence.length; i++) {
     const item = allEvidence[i];
     let matches = true;
@@ -71,22 +74,21 @@ function getFilteredEvidence() {
   }
 
   if (sortVal === "title-asc") {
-    results.sort(function (a, b) {
-      return a.title.localeCompare(b.title);
-    });
+    results.sort((a, b) => a.title.localeCompare(b.title));
   } else if (sortVal === "title-desc") {
-    results.sort(function (a, b) {
-      return b.title.localeCompare(a.title);
-    });
+    results.sort((a, b) => b.title.localeCompare(a.title));
   } else if (sortVal === "date-asc") {
-    results.sort(function (a, b) {
-      return new Date(a.timestamp) - new Date(b.timestamp);
-    });
+    results.sort(
+      (a, b) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+    );
   } else {
-    results.sort(function (a, b) {
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    });
+    results.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+    );
   }
+
   setFilteredEvidence(results);
   return results;
 }
@@ -101,7 +103,6 @@ export function renderEvidenceList() {
   const container = document.getElementById("evidenceList");
   if (!container) return;
 
-  const loadingIndicator = document.getElementById("evidenceLoadingIndicator");
   const results = getFilteredEvidence();
 
   let html = "";
@@ -116,8 +117,8 @@ export function renderEvidenceList() {
   container.addEventListener("click", handleEvidenceListClick);
 }
 
-function renderEvidenceCardHTML(ev) {
-  let isBookmarked = bookmarks.indexOf(ev.id) !== -1;
+function renderEvidenceCardHTML(ev: Evidence): string {
+  const isBookmarked = bookmarks.indexOf(ev.id) !== -1;
   let html = '<div class="evidence-card" data-id="' + ev.id + '">';
   html +=
     '<button class="bookmark-btn ' +
@@ -163,18 +164,22 @@ function renderEvidenceCardHTML(ev) {
   return html;
 }
 
-function handleEvidenceListClick(event) {
-  const target = event.target;
-  if (target.dataset && target.dataset.action === "bookmark") {
+function handleEvidenceListClick(event: Event) {
+  const target = event.target as HTMLElement;
+  if (
+    target.dataset &&
+    target.dataset.action === "bookmark" &&
+    target.dataset.id
+  ) {
     event.stopPropagation();
     handleBookmarkClick(target.dataset.id);
     return;
   }
   const card = target.closest(".evidence-card");
-  if (card) openEvidenceDetail(card.getAttribute("data-id"));
+  if (card) openEvidenceDetail(card.getAttribute("data-id") || "");
 }
 
-function handleBookmarkClick(evidenceId) {
+function handleBookmarkClick(evidenceId: string) {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
 
@@ -191,56 +196,45 @@ function handleBookmarkClick(evidenceId) {
 }
 
 export function handleSortChange() {
-  /*var sortValue = document.getElementById("sortEvidence").value;
-
-  if (sortValue === "title-asc") {
-    filteredEvidence.sort(function (a, b) { return a.title.localeCompare(b.title); });
-  } else if (sortValue === "title-desc") {
-    filteredEvidence.sort(function (a, b) { return b.title.localeCompare(a.title); });
-  } else if (sortValue === "date-asc") {
-    filteredEvidence.sort(function (a, b) { return new Date(a.timestamp) - new Date(b.timestamp); });
-  } else {
-    filteredEvidence.sort(function (a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
-  }*/
   renderEvidenceList();
 }
 
 export function clearFilters() {
-  document.getElementById("evidenceSearch").value = "";
-  document.getElementById("filterType").value = "";
-  document.getElementById("filterPerson").value = "";
-  document.getElementById("filterLocation").value = "";
-  document.getElementById("filterStatus").value = "";
-  document.getElementById("filterRelevance").value = "";
+  getEl<HTMLInputElement>("evidenceSearch").value = "";
+  getEl<HTMLSelectElement>("filterType").value = "";
+  getEl<HTMLSelectElement>("filterPerson").value = "";
+  getEl<HTMLSelectElement>("filterLocation").value = "";
+  getEl<HTMLSelectElement>("filterStatus").value = "";
+  getEl<HTMLSelectElement>("filterRelevance").value = "";
   renderEvidenceList();
 }
 
-function simulateAsyncSearch(term) {
-  return new Promise(function (resolve) {
-    setTimeout(function () {
-      resolve(term);
-    }, 300);
+function simulateAsyncSearch(term: string): Promise<string> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(term), 300);
   });
 }
 
 let latestSearchRequestId = 0;
 
-export function handleSearchInput(event) {
-  const term = event.target.value;
-  let requestId = ++latestSearchRequestId;
+export function handleSearchInput(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const term = target.value;
+  const requestId = ++latestSearchRequestId;
 
-  simulateAsyncSearch(term).then(function (resolvedTerm) {
+  simulateAsyncSearch(term).then(() => {
     if (requestId !== latestSearchRequestId) return;
     renderEvidenceList();
   });
 }
 
-export function openEvidenceDetail(evidenceId) {
+export function openEvidenceDetail(evidenceId: string) {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
   setSelectedEvidence(ev);
 
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
   section.classList.remove("hidden");
 
   renderEvidenceDetail(ev);
@@ -249,25 +243,25 @@ export function openEvidenceDetail(evidenceId) {
 
 export function closeEvidenceDetail() {
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
   section.classList.add("hidden");
   section.innerHTML = "";
   setSelectedEvidence(null);
 }
 
-function renderEvidenceDetail(ev) {
+function renderEvidenceDetail(ev: Evidence) {
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
 
-  const personNames = [];
-  for (let p = 0; p < ev.personIds.length; p++) {
-    const person = findPersonById(ev.personIds[p]);
-    personNames.push(person ? person.name : ev.personIds[p]);
-  }
+  const personNames = ev.personIds.map((id) => {
+    const person = findPersonById(id);
+    return person ? person.name : id;
+  });
 
-  const locationNames = [];
-  for (let l = 0; l < ev.locationIds.length; l++) {
-    let loc = findLocationById(ev.locationIds[l]);
-    locationNames.push(loc ? loc.id + " - " + loc.name : ev.locationIds[l]);
-  }
+  const locationNames = ev.locationIds.map((id) => {
+    const loc = findLocationById(id);
+    return loc ? loc.id + " - " + loc.name : id;
+  });
 
   let tagsHtml = "";
   for (let t = 0; t < ev.tags.length; t++) {
@@ -344,32 +338,40 @@ function renderEvidenceDetail(ev) {
 
   section.innerHTML = html;
 
-  document
-    .getElementById("detailStatusSelect")
-    .addEventListener("change", function (e) {
-      ev.status = e.target.value;
+  getEl<HTMLSelectElement>("detailStatusSelect").addEventListener(
+    "change",
+    (e) => {
+      ev.status = (e.target as HTMLSelectElement).value;
       renderEvidenceDetail(ev);
       if (viewRendered.evidence) renderEvidenceList();
-    });
-  document
-    .getElementById("detailRelevanceSelect")
-    .addEventListener("change", function (e) {
-      ev.relevance = e.target.value;
+    },
+  );
+  getEl<HTMLSelectElement>("detailRelevanceSelect").addEventListener(
+    "change",
+    (e) => {
+      ev.relevance = (e.target as HTMLSelectElement).value;
       renderEvidenceDetail(ev);
       if (viewRendered.evidence) renderEvidenceList();
-    });
+    },
+  );
 }
 
-function statusOptionHTML(current, value, label) {
+function statusOptionHTML(
+  current: string | undefined,
+  value: string,
+  label: string,
+): string {
   const currentLower = (current || "").toLowerCase();
   const selected = currentLower === value ? " selected" : "";
   return '<option value="' + value + '"' + selected + ">" + label + "</option>";
 }
 
 export function saveCurrentNote() {
-  const textarea = document.getElementById("evidenceNoteInput");
+  const textarea = document.getElementById(
+    "evidenceNoteInput",
+  ) as HTMLTextAreaElement | null;
   if (!textarea) return;
-  const evidenceId = textarea.getAttribute("data-evidence-id");
+  const evidenceId = textarea.getAttribute("data-evidence-id") || "";
   const text = textarea.value;
   saveNoteForEvidence(evidenceId, text);
   const preview = document.getElementById("notePreview");

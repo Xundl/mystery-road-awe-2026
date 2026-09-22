@@ -1,19 +1,25 @@
 import { allTimeline, incrementModalCloseListenerCount } from "../app.js";
-import { findLocationById, findEvidenceById, formatDate } from "./utils.js";
+import {
+  findLocationById,
+  findEvidenceById,
+  formatDate,
+  getEl,
+} from "./utils.js";
 import { openEvidenceDetail } from "./evidence.js";
+import type { TimelineEvent } from "./types.js";
 
 export function renderTimeline() {
   const container = document.getElementById("timelineContainer");
   if (!container) return;
 
-  const order = document.getElementById("timelineOrder").value;
-  const personFilter = document.getElementById("timelinePersonFilter").value;
-  const locationFilter = document.getElementById(
+  const order = getEl<HTMLSelectElement>("timelineOrder").value;
+  const personFilter = getEl<HTMLSelectElement>("timelinePersonFilter").value;
+  const locationFilter = getEl<HTMLSelectElement>(
     "timelineLocationFilter",
   ).value;
-  const typeFilter = document.getElementById("timelineTypeFilter").value;
+  const typeFilter = getEl<HTMLSelectElement>("timelineTypeFilter").value;
 
-  let events = [];
+  let events: TimelineEvent[] = [];
   for (let i = 0; i < allTimeline.length; i++) {
     const evt = allTimeline[i];
     if (personFilter && evt.personIds.indexOf(personFilter) === -1) continue;
@@ -23,8 +29,8 @@ export function renderTimeline() {
     events.push(evt);
   }
 
-  events = events.slice().sort(function (a, b) {
-    const diff = new Date(a.time) - new Date(b.time);
+  events = events.slice().sort((a, b) => {
+    const diff = new Date(a.time).getTime() - new Date(b.time).getTime();
     return order === "desc" ? -diff : diff;
   });
 
@@ -43,10 +49,10 @@ export function renderTimeline() {
     html += "<h3>" + item.title + "</h3>";
     html += "<p>" + item.description + "</p>";
 
-    const eventLocationNames = [];
+    const eventLocationNames: string[] = [];
     for (let el = 0; el < item.locationIds.length; el++) {
       const evtLoc = findLocationById(item.locationIds[el]);
-      eventLocationNames.push(evtLoc || item.locationIds[el]);
+      eventLocationNames.push(evtLoc ? evtLoc.name : item.locationIds[el]);
     }
     if (eventLocationNames.length > 0) {
       html +=
@@ -73,19 +79,20 @@ export function renderTimeline() {
   const linkButtons = container.querySelectorAll(".evidence-link-btn");
   for (let b = 0; b < linkButtons.length; b++) {
     linkButtons[b].addEventListener("click", function (e) {
-      openEvidenceModal(e.target.getAttribute("data-evidence-id"));
+      const target = e.target as HTMLElement;
+      openEvidenceModal(target.getAttribute("data-evidence-id") || "");
     });
   }
 }
 
-function certaintyBadgeClass(certainty) {
+function certaintyBadgeClass(certainty: string): string {
   if (certainty === "confirmed") return "reviewed";
   if (certainty === "contradictory") return "critical";
   if (certainty === "reported") return "flagged";
   return "unreviewed";
 }
 
-function openEvidenceModal(evidenceId) {
+function openEvidenceModal(evidenceId: string) {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
 
@@ -120,17 +127,20 @@ function openEvidenceModal(evidenceId) {
   incrementModalCloseListenerCount();
 
   modal.addEventListener("click", function (e) {
+    const target = e.target as HTMLElement;
     if (
-      e.target.classList.contains("modal-close-btn") ||
-      e.target.classList.contains("modal-backdrop")
+      target.classList.contains("modal-close-btn") ||
+      target.classList.contains("modal-backdrop")
     ) {
-      modal.innerHTML = "";
+      modal!.innerHTML = "";
     }
-    if (e.target.getAttribute && e.target.getAttribute("data-open-full")) {
-      modal.innerHTML = "";
+    const openFullId =
+      target.getAttribute && target.getAttribute("data-open-full");
+    if (openFullId) {
+      modal!.innerHTML = "";
       window.navigateTo("evidence");
       setTimeout(function () {
-        openEvidenceDetail(e.target.getAttribute("data-open-full"));
+        openEvidenceDetail(openFullId);
       }, 0);
     }
   });
