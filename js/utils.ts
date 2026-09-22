@@ -51,7 +51,9 @@ export const getStatusBadgeClass = (status: string | undefined): string => {
   return "badge-unreviewed";
 };
 
-export const getRelevanceBadgeClass = (relevance: string | undefined): string => {
+export const getRelevanceBadgeClass = (
+  relevance: string | undefined,
+): string => {
   const r = (relevance || "").toLowerCase();
   if (r === "relevant") return "badge-relevant";
   return "badge-unreviewed";
