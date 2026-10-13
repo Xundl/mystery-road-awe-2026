@@ -10,7 +10,19 @@
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "checkJs": false,
-    "noEmit": true
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ]
   },
-  "include": ["js/**/*.ts", "app.ts", "global.d.ts"]
+  "include": [
+    "js/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "app.ts",
+    "global.d.ts"
+  ]
 }

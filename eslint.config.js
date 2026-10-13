@@ -3,7 +3,7 @@ import tseslint from "typescript-eslint";
 export default tseslint.config(
   ...tseslint.configs.recommended,
   {
-    files: ["js/**/*.js", "js/**/*.ts", "app.ts"],
+    files: ["js/**/*.js", "js/**/*.ts", "src/**/*.ts", "src/**/*.tsx", "app.ts"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
@@ -14,7 +14,8 @@ export default tseslint.config(
         fetch: "readonly",
         console: "readonly",
         setTimeout: "readonly",
-        alert: "readonly"
+        alert: "readonly",
+        URL: "readonly"
       }
     },
     rules: {

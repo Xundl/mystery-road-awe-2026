@@ -18,17 +18,24 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint js app.ts",
-    "lint:fix": "eslint js app.ts --fix",
-    "format": "prettier --write js app.ts",
+    "lint": "eslint js src app.ts",
+    "lint:fix": "eslint js src app.ts --fix",
+    "format": "prettier --write js src app.ts",
     "typecheck": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
     "eslint": "^10.11.0",
     "prettier": "^3.9.8",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.70.1",
     "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   }
 }
