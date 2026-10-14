@@ -1,11 +1,20 @@
-import type { CaseDataState } from "../useCaseData";
-import { formatDate, getStatusBadgeClass } from "../../js/utils";
-import { CaseSummaryCard } from "../components/CaseSummaryCard";
-import { StatCard } from "../components/StatCard";
-import { ProgressBar } from "../components/ProgressBar";
+import type { CaseDataState } from "../../data/useCaseData";
+import { formatDate } from "../../../js/utils";
+import { Badge, type BadgeVariant } from "../../components/Badge";
+import { Card } from "../../components/Card";
+import { CaseSummaryCard } from "./CaseSummaryCard";
+import { StatCard } from "./StatCard";
+import { ProgressBar } from "./ProgressBar";
 
 interface DashboardPageProps {
   data: CaseDataState;
+}
+
+function statusVariant(status: string): BadgeVariant {
+  const s = (status || "").toLowerCase();
+  if (s === "reviewed") return "reviewed";
+  if (s === "flagged") return "flagged";
+  return "unreviewed";
 }
 
 export function DashboardPage({ data }: DashboardPageProps) {
@@ -38,37 +47,32 @@ export function DashboardPage({ data }: DashboardPageProps) {
         <StatCard value={reviewedCount} label="Reviewed" />
       </div>
 
-      <div className="dashboard-panel">
-        <h3>Review progress</h3>
+      <Card title="Review progress">
         <ProgressBar percent={progressPct} />
         <p>{progressPct}% of evidence reviewed</p>
-      </div>
+      </Card>
 
       <div className="dashboard-columns">
-        <div className="dashboard-panel">
-          <h3>Recent evidence</h3>
+        <Card title="Recent evidence">
           {recentEvidence.length === 0 && <p>No evidence loaded yet.</p>}
           {recentEvidence.map((ev) => (
             <div className="mini-list-item" key={ev.id}>
               <strong>{ev.id}</strong> &mdash; {ev.title}{" "}
-              <span className={`badge ${getStatusBadgeClass(ev.status)}`}>
-                {ev.status}
-              </span>
+              <Badge variant={statusVariant(ev.status)} label={ev.status} />
             </div>
           ))}
-        </div>
+        </Card>
 
-        <div className="dashboard-panel">
-          <h3>Recent timeline events</h3>
+        <Card title="Recent timeline events">
           {recentTimeline.length === 0 && <p>No timeline events loaded yet.</p>}
           {recentTimeline.map((evt) => (
-            <div className="mini-list-item" key={`${evt.time}-${evt.title}`}>
+            <div className="mini-list-item" key={evt.id}>
               <strong>{formatDate(evt.time)}</strong>
               <br />
               {evt.title}
             </div>
           ))}
-        </div>
+        </Card>
       </div>
     </section>
   );

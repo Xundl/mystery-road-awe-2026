@@ -1,12 +1,6 @@
 import { NavBar } from "./NavBar";
-import type { ViewName } from "../useHashRoute";
 
-interface HeaderProps {
-  current: ViewName;
-  onNavigate: (v: ViewName) => void;
-}
-
-export function Header({ current, onNavigate }: HeaderProps) {
+export function Header() {
   return (
     <header className="app-header">
       <div className="header-inner">
@@ -23,7 +17,7 @@ export function Header({ current, onNavigate }: HeaderProps) {
             </p>
           </div>
         </div>
-        <NavBar current={current} onNavigate={onNavigate} />
+        <NavBar />
       </div>
     </header>
   );

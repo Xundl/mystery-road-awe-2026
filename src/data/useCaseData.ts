@@ -5,7 +5,7 @@ import type {
   Location,
   Person,
   TimelineEvent,
-} from "../js/types";
+} from "../../js/types";
 
 export interface CaseDataState {
   loading: boolean;

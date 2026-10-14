@@ -13,6 +13,7 @@ export interface Person {
   avatar: string;
   responsibilities: string[];
   statement: string;
+  background?: string;
 }
 
 export interface Location {
@@ -38,6 +39,7 @@ export interface Evidence {
 }
 
 export interface TimelineEvent {
+  id: string;
   time: string;
   certainty: string;
   title: string;

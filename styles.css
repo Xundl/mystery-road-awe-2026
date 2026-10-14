@@ -819,3 +819,16 @@ a:focus-visible {
   .header-inner { flex-direction: column; align-items: flex-start; }
   .detail-field strong { min-width: auto; display: block; }
 }
+
+/* React router links styled like the buttons */
+a.nav-btn,
+a.tab-btn {
+  display: inline-block;
+  text-decoration: none;
+}
+a.tab-btn {
+  color: inherit;
+}
+a.tab-btn.active {
+  color: #fff;
+}
