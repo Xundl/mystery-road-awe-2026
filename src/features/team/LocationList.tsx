@@ -7,6 +7,7 @@ interface LocationListProps {
 
 export function LocationList({ locations }: LocationListProps) {
   return (
+    // Demo 3: gleiches Muster, key = location.id
     <div className="locations-grid">
       {locations.map((loc) => (
         <LocationCard key={loc.id} location={loc} />

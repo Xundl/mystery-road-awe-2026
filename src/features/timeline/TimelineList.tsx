@@ -8,12 +8,13 @@ interface TimelineListProps {
 }
 
 export function TimelineList({ events, people, locations }: TimelineListProps) {
-  // Early return: empty state
+  // Demo 2 (Early Return): keine Events -> Meldung anzeigen, restliches Rendern wird übersprungen
   if (events.length === 0) {
     return <p>No timeline events match the current filters.</p>;
   }
 
   return (
+    // Demo 3: key = event.id (eindeutig pro Timeline-Event)
     <div className="timeline-container">
       {events.map((event) => (
         <TimelineEventCard

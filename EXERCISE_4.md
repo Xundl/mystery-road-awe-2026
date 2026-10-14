@@ -68,7 +68,12 @@ each with an explicitly typed props interface/type (no untyped or `any` props).
 **Questions** (depend on the tasks above)
 
 - [ ] Show one place where you used `condition && <Component />}` instead of a ternary. What would go wrong if `condition` were a number like `0` instead of a boolean and does that risk apply to your actual code?
+
+ANTWORT: Beispiel wäre in TimelineEventCard.tsx bei locationNames.length > 0 && <p> ... </p>, weil ich im Nein-Fall nichts anzeigen will, also keinen else-Zweig brauche. Wäre die Bedingung eine Zahl wie 0, würde React die 0 selbst anzeigen. Bei mir besteht das Risiko nicht, weil ich mit > 0 vergleiche und damit einen echten Boolean habe.
+
 - [ ] Why might returning `null` from a component be preferable to returning an empty `<div>` in some cases? Did you use either, and why?
+
+ANTWORT: null rendert halt gar nichts ins DOM. Ein leeres <div> erzeugt ein unnötiges Element, das Layout oder CSS stören kann. Ich habe null nicht verwendet. Stattdessen in TimelineList.tsx habe ich eine Meldung falls leere Daten vorhanden sind.
 
 ---
 
@@ -81,6 +86,8 @@ each with an explicitly typed props interface/type (no untyped or `any` props).
 **Questions** (depend on the tasks above)
 
 - [ ] What does React actually use `key` for internally?
+
+ANTWORT: Also React nutzt "key" um bei einem Re-Render zu erkennen welches Listenelement welches ist. Dadurch kann es Elemente, da ist auch ihr Zustand inkludiert, wiederverwenden, verschieben oder entfernen, anstatt alles neu aufzubauen
 
 ---
 
@@ -124,8 +131,13 @@ folder of files). Including the Dashboard and shell from Exercise 3.
 **Questions** (depend on the tasks above)
 
 - [ ] What's the difference between organizing files "by type" (all components in one folder, all hooks in another) and "by feature"? What made you choose the structure you chose for this app specifically?
+
+ANTWORT: by Type gruppiert nach technischer Art (Alle Components in einem Ordner, alle Hooks in einem anderen). "By feature" gruppiert nach fachlichem Bereich, sodass Dateien, die man gemeinsam ändert, zusammenliegen. Ich habe "by feature" gewählt, weil die App klare Bereiche hat (Dashboard, Team, Timeline) und die Migration Ansicht für Ansicht läuft.
+
+
 - [ ] Where did you draw the line between a component that lives inside one feature folder and one that belongs in a shared/common folder? Give one real example of each from your own structure.
 
+ANTWORT: Eine Komponente bleibt im Feature-Ordner, bis ein zweites Feature sie braucht. Dann zieht sie nach components/. Feature-lokal ist zum Beispiel PersonCard (nur Team), geteilt sind Badge und Card (Dashboard, Team und Timeline)
 ---
 
 ## Demo 7 — Reusable UI elements

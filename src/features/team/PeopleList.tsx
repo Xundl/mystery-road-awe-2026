@@ -9,6 +9,8 @@ interface PeopleListProps {
 
 export function PeopleList({ people, evidence }: PeopleListProps) {
   return (
+    // Demo 3: Liste wird mit .map() in eine Liste von Komponenten verwandelt.
+    // key = stabile id der Person, damit React beim Re-Render die Elemente zuordnen kann.
     <div className="people-grid">
       {people.map((person) => (
         <PersonCard

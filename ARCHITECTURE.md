@@ -1,3 +1,6 @@
+Demo 6: Struktur "by feature":
+app/ (Shell), components/ (geteilt), data/ (Daten laden),features/ (dashboard, team, timeline)
+
 # Architecture (React part)
 
 ```

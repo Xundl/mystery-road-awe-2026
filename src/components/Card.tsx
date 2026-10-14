@@ -6,8 +6,7 @@ interface CardProps {
   children: ReactNode;
 }
 
-// Generic card/panel wrapper (composition via `children`).
-// Used by Dashboard panels, person cards, location cards and timeline events.
+// Demo 6: liegt in components/, weil mehrere Features es nutzen (Dashboard, Team, Timeline)
 export function Card({
   className = "dashboard-panel",
   title,

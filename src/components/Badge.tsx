@@ -5,7 +5,7 @@ interface BadgeProps {
   label: string;
 }
 
-// Reusable badge: the variant decides the colour, the label is the text.
+// Demo 6: liegt in components/, weil mehrere Features es nutzen (Dashboard, Team, Timeline)
 export function Badge({ variant, label }: BadgeProps) {
   return <span className={`badge badge-${variant}`}>{label}</span>;
 }

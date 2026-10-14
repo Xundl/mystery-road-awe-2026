@@ -8,7 +8,8 @@ interface PersonCardProps {
   showBackground?: boolean;
 }
 
-// Presentational: only renders what it is given.
+// Demo 2 (Ternary): Einzahl/Mehrzahl ("item" oder "items")
+// Demo 6: liegt in features/team/, weil nur das Team-Feature es braucht
 export function PersonCard({
   person,
   evidenceCount,
