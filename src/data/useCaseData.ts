@@ -15,7 +15,6 @@ export interface CaseDataState {
   people: Person[];
   locations: Location[];
   timeline: TimelineEvent[];
-  bookmarkCount: number;
 }
 
 const BASE = import.meta.env.BASE_URL;
@@ -24,16 +23,6 @@ async function getJson<T>(file: string): Promise<T> {
   const res = await fetch(`${BASE}data/${file}`);
   if (!res.ok) throw new Error(`Could not load ${file} (${res.status})`);
   return (await res.json()) as T;
-}
-
-function readBookmarkCount(): number {
-  try {
-    const raw = localStorage.getItem("remotion_bookmarks");
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed.length : 0;
-  } catch {
-    return 0;
-  }
 }
 
 // PLACEHOLDER architecture (Exercise 3): the data is loaded once in <App />
@@ -47,7 +36,6 @@ export function useCaseData(): CaseDataState {
     people: [],
     locations: [],
     timeline: [],
-    bookmarkCount: 0,
   });
 
   useEffect(() => {
@@ -69,7 +57,6 @@ export function useCaseData(): CaseDataState {
           locations,
           evidence,
           timeline,
-          bookmarkCount: readBookmarkCount(),
         });
       })
       .catch((err: unknown) => {

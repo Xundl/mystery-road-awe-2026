@@ -1,6 +1,7 @@
+import { useBookmarks } from "../bookmarks/BookmarksContext";
 import type { CaseDataState } from "../../data/useCaseData";
 import { formatDate } from "../../../js/utils";
-import { Badge, type BadgeVariant } from "../../components/Badge";
+import { Badge, statusVariant } from "../../components/Badge";
 import { Card } from "../../components/Card";
 import { CaseSummaryCard } from "./CaseSummaryCard";
 import { StatCard } from "./StatCard";
@@ -10,16 +11,10 @@ interface DashboardPageProps {
   data: CaseDataState;
 }
 
-function statusVariant(status: string): BadgeVariant {
-  const s = (status || "").toLowerCase();
-  if (s === "reviewed") return "reviewed";
-  if (s === "flagged") return "flagged";
-  return "unreviewed";
-}
-
 export function DashboardPage({ data }: DashboardPageProps) {
-  const { caseData, evidence, people, locations, timeline, bookmarkCount } =
-    data;
+  // Demo 4/8: the count is derived from the shared bookmark state (not a copy)
+  const { bookmarks } = useBookmarks();
+  const { caseData, evidence, people, locations, timeline } = data;
 
   // Derived values are recomputed on every render -> never stale.
   const reviewedCount = evidence.filter(
@@ -43,7 +38,7 @@ export function DashboardPage({ data }: DashboardPageProps) {
         <StatCard value={evidence.length} label="Evidence items" />
         <StatCard value={people.length} label="People" />
         <StatCard value={locations.length} label="Locations" />
-        <StatCard value={bookmarkCount} label="Bookmarked" />
+        <StatCard value={bookmarks.length} label="Bookmarked" />
         <StatCard value={reviewedCount} label="Reviewed" />
       </div>
 
